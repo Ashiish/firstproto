@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.dwit.research.begnas;
 
 import org.apache.commons.cli.BasicParser;
@@ -14,7 +11,6 @@ import org.apache.commons.cli.ParseException;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println( "Hello World!" );
 		
 		Options options = constructBasicOptions();
 		
@@ -26,30 +22,38 @@ public class Main {
 			String startDate = cmd.getOptionValue("s");
 			String endDate = cmd.getOptionValue("e");
 			
-			if (startDate == null) {
-				System.err.println("Please enter start date.");
-				HelpFormatter helpFormatter = new HelpFormatter();
-				helpFormatter.printHelp("LastDayEachMonth", options);
-				return;
-			}
+			Boolean isLastDay = cmd.hasOption("l");
 			
-			if (endDate == null) {
-				System.err.println("Please enter end date.");
-				HelpFormatter helpFormatter = new HelpFormatter();
-				helpFormatter.printHelp("LastDayEachMonth", options);
-				return;
-			}
+		//	Boolean testClass = cmd.hasOption("t");			
 			
-			System.out.println("Start date :" + startDate);
-			System.out.println("End date :" + endDate);
+			if(isLastDay){
+				if (startDate == null || startDate.isEmpty()) {
+					System.err.println("Please enter start date.");
+					HelpFormatter helpFormatter = new HelpFormatter();
+					helpFormatter.printHelp("Main", options);
+					return;
+				}
 				
-
+				if (endDate == null || startDate.isEmpty()) {
+					System.err.println("Please enter end date.");
+					HelpFormatter helpFormatter = new HelpFormatter();
+					helpFormatter.printHelp("Main", options);
+					return;
+				}
+								
+				new LastDayEachMonth(startDate, endDate);
+			}else{
+				System.err.println("Please choose an option.");
+				HelpFormatter helpFormatter = new HelpFormatter();
+				helpFormatter.printHelp("Main", options);
+				return;
+			}
 		} catch (MissingArgumentException e) {
 			HelpFormatter helpFormatter = new HelpFormatter();
-			helpFormatter.printHelp("LastDateEachMonth", options);
+			helpFormatter.printHelp("Main", options);
 		} catch (ParseException e) {
 			HelpFormatter helpFormatter = new HelpFormatter();
-			helpFormatter.printHelp("LastDateEachMonth", options);			
+			helpFormatter.printHelp("Main", options);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,12 +66,11 @@ public class Main {
 				.addOption("s", "start-date",true,
 						"Specify start date")
 				.addOption("e", "end-date", true,
-						"Specify end date.");
+						"Specify end date.")
+				.addOption("l", "lastDay", false, "Specify to get last date of each month between dates.");
 
 		return basicOptions;
 	}
-
-
 }
 
 
